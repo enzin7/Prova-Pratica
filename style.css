@@ -1,0 +1,241 @@
+* {
+  margin: 0;
+  padding: 0;
+  color: #0b4572;
+  font-size: 1.2 rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.nav-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  padding-block: 0.5rem;
+
+  & > ul {
+    column-gap: 2rem;
+    display: flex;
+    list-style: none;
+
+    & > li {
+      & > a {
+        color: #0b4572;
+        text-decoration: none;
+        transition:
+          background-color 0.3s ease,
+          transform 0.2s ease;
+
+        &:hover {
+          color: #0d5a94;
+          transform: scale(1.25);
+        }
+      }
+
+      & > .active {
+        color: #0d5a94;
+        cursor: default;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+hr {
+  background-color: #0b4572;
+  border: 0;
+  height: 5px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  row-gap: 2rem;
+
+  max-width: 1200px;
+  margin: 0 auto;
+
+  & > section {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    max-width: 918.75px;
+                        
+    & > figure > figcaption {
+      margin-bottom: 1rem;
+    }
+
+    & > ul {
+      padding-left: 1.8rem;
+    }
+  }
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  & th {
+    background-color: #0b4572;
+    color: white;
+    font-weight: 600;
+    text-align: left;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+
+  & td {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 15px;
+    color: #333;
+
+    &:first-child {
+      font-weight: bold;
+      color: #0b4572;
+    }
+  }
+
+  & tr {
+    &:nth-child(even) {
+      background-color: rgba(13, 90, 148, 0.05);
+    }
+
+    &:hover {
+      background-color: rgba(13, 90, 148, 0.1);
+      transition: background-color 0.3s ease;
+    }
+  }
+}
+
+.container-contato {
+  width: 95%;
+  background: #fff;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  position: relative;
+
+  & > span {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: #fff;
+    padding: 0 10px;
+    color: #0d5a94;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  & > form {
+    & > div {
+      margin-bottom: 20px;
+
+      & > label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      & > input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+
+        &:focus {
+          border-color: #0d5a94;
+          box-shadow: 0 0 5px rgba(13, 90, 148, 0.2);
+        }
+      }
+
+      & > textarea {
+        height: 120px;
+        resize: vertical;
+      }
+    }
+  }
+}
+
+.btn-enviar {
+  background-color: #0d5a94;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0b4572;
+  }
+}
+
+::placeholder {
+  color: #aaa;
+}
+
+footer {
+  align-items: center;
+  background-color: #0b4572;
+  display: flex;
+  justify-content: space-around;
+
+  & > img {
+    filter: brightness(0) saturate(100%) invert(100%);
+  }
+
+  & > ul {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 4rem;
+    row-gap: 1rem;
+
+    & > li {
+      list-style: none;
+
+      & > a {
+        color: #ffffff;
+        font-size: 1.25rem;
+        font-family: Arial, Helvetica, sans-serif;
+        text-decoration: none;
+        transition:
+          background-color 0.3s ease,
+          transform 0.2s ease;
+
+        &:hover {
+          color: #0d5a94;
+          transform: scale(1.25);
+        }
+      }
+
+      & > .active {
+        cursor: default;
+        font-weight: bold;
+      }
+    }
+  }
+
+  & > p {
+    color: #ffffff;
+    font-size: 1.25rem;
+    max-width: 250px;
+    text-align: center;
+  }
+}
