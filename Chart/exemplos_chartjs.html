@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart.js — Exemplos Práticos</title>
+
+  <!-- ══════════════════════════════════════════════
+       FONTES EXTERNAS (Google Fonts)
+       DM Sans   → corpo do texto
+       JetBrains Mono → números e código
+       ══════════════════════════════════════════════ -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ══════════════════════════════════════════════
+       BIBLIOTECAS EXTERNAS (CDN)
+       Chart.js         → renderiza os gráficos
+       plugin-datalabels → rótulos sobre as barras
+       ══════════════════════════════════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+  <!-- ══════════════════════════════════════════════
+       CSS — arquivo separado (exemplos_chartjs.css)
+       Contém: variáveis, layout, cards, botões, etc.
+       ══════════════════════════════════════════════ -->
+  <link rel="stylesheet" href="exemplos_chartjs.css">
+</head>
+
+<body>
+
+  <!-- ════════════════════════════════════════════════════════
+       HEADER DA PÁGINA
+       ════════════════════════════════════════════════════════ -->
+  <div class="header">
+    <h1>Chart<em>.</em>js — Exemplos Práticos</h1>
+    <p>7 exemplos funcionais usando dados reais de chamados de suporte.
+       Cada gráfico acompanha o código comentado linha a linha.</p>
+  </div>
+
+  <div class="container">
+
+    <!-- ══════════════════════════════════════════════════════
+         EXEMPLO 1 — BARRAS VERTICAIS SIMPLES
+         Arquivo JS: Seção 1 (função exemplo1)
+         ══════════════════════════════════════════════════════ -->
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">1</div>
+        <h2>Barras Verticais <span>— type: "bar"</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        O gráfico mais básico. Compara a quantidade de chamados por tipo
+        (Bug vs Melhoria). Usa <code>labels</code> para o eixo X e
+        <code>data</code> para os valores. Cada barra recebe uma cor
+        diferente via <code>backgroundColor</code> como array.
+      </div>
+
+      <!-- Container do gráfico (altura definida pela classe CSS .h280) -->
+      <div class="chart-box h280">
+        <canvas id="chart1"></canvas>
+      </div>
+
+      <!-- Tabela de parâmetros usados -->
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor usado</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>type</code></td>
+            <td><code>"bar"</code></td>
+            <td>Define o tipo: barras verticais</td>
+          </tr>
+          <tr>
+            <td><code>labels</code></td>
+            <td><code>["Bug", "Melhoria"]</code></td>
+            <td>Rótulos do eixo X. Cada posição = uma barra</td>
+          </tr>
+          <tr>
+            <td><code>data</code></td>
+            <td><code>[7, 3]</code></td>
+            <td>Valores numéricos. Posição 0 → primeiro label</td>
+          </tr>
+          <tr>
+            <td><code>backgroundColor</code></td>
+            <td><code>["#ef4444", "#6366f1"]</code></td>
+            <td>Cor por barra. Array = uma cor para cada. String = cor única</td>
+          </tr>
+          <tr>
+            <td><code>borderRadius</code></td>
+            <td><code>8</code></td>
+            <td>Cantos arredondados (px)</td>
+          </tr>
+          <tr>
+            <td><code>borderSkipped</code></td>
+            <td><code>false</code></td>
+            <td>false = arredonda TODOS os cantos. "bottom" = só o topo</td>
+          </tr>
+          <tr>
+            <td><code>responsive</code></td>
+            <td><code>true</code></td>
+            <td>Redimensiona com a janela</td>
+          </tr>
+          <tr>
+            <td><code>maintainAspectRatio</code></td>
+            <td><code>false</code></td>
+            <td>false = preenche 100% do container (altura via CSS)</td>
+          </tr>
+          <tr>
+            <td><code>legend.display</code></td>
+            <td><code>false</code></td>
+            <td>Oculta a legenda (com 1 dataset, é redundante)</td>
+          </tr>
+          <tr>
+            <td><code>y.beginAtZero</code></td>
+            <td><code>true</code></td>
+            <td>Eixo Y começa em 0 (sem isso, pode começar em 3)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Botão toggle de código -->
+      <button class="code-toggle" id="btn-1" onclick="toggleCode('1')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-1">
+        <div class="code-block"><pre><span class="cmt">// 1. Pega o &lt;canvas&gt; pelo id</span>
+<span class="kw">var</span> ctx = document.getElementById(<span class="str">"chart1"</span>);
+
+<span class="cmt">// 2. Cria o gráfico</span>
+<span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+  <span class="prop">type</span>: <span class="str">"bar"</span>,
+
+  <span class="prop">data</span>: {
+    <span class="prop">labels</span>: [<span class="str">"Bug"</span>, <span class="str">"Melhoria"</span>],
+    <span class="prop">datasets</span>: [{
+      <span class="prop">label</span>: <span class="str">"Quantidade de chamados"</span>,
+      <span class="prop">data</span>: [<span class="num">7</span>, <span class="num">3</span>],
+      <span class="prop">backgroundColor</span>: [<span class="str">"#ef4444"</span>, <span class="str">"#6366f1"</span>],
+      <span class="prop">borderRadius</span>: <span class="num">8</span>,
+      <span class="prop">borderSkipped</span>: <span class="kw">false</span>,
+      <span class="prop">barThickness</span>: <span class="num">80</span>,
+    }]
+  },
+
+  <span class="prop">options</span>: {
+    <span class="prop">responsive</span>: <span class="kw">true</span>,
+    <span class="prop">maintainAspectRatio</span>: <span class="kw">false</span>,
+    <span class="prop">plugins</span>: { <span class="prop">legend</span>: { <span class="prop">display</span>: <span class="kw">false</span> } },
+    <span class="prop">scales</span>: {
+      <span class="prop">x</span>: { <span class="prop">grid</span>: { <span class="prop">display</span>: <span class="kw">false</span> } },
+      <span class="prop">y</span>: { <span class="prop">beginAtZero</span>: <span class="kw">true</span> }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         EXEMPLO 2 — BARRAS EMPILHADAS
+         ══════════════════════════════════════════════════════ -->
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">2</div>
+        <h2>Barras Empilhadas <span>— stacked: true + datalabels</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Mostra Bug vs Melhoria empilhados por mês. A chave é
+        <code>scales.x.stacked: true</code> e <code>scales.y.stacked: true</code>.
+        Cada <code>dataset</code> vira uma camada. O plugin <code>datalabels</code>
+        exibe os valores sobre cada segmento.
+      </div>
+
+      <!-- Legenda HTML customizada (ao invés da legenda nativa) -->
+      <div class="legenda">
+        <span><i style="background:#ef4444"></i> Bug</span>
+        <span><i style="background:#6366f1"></i> Melhoria</span>
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chart2"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>datasets</code></td>
+            <td>2 objetos</td>
+            <td>Cada objeto = 1 camada de barras empilhadas</td>
+          </tr>
+          <tr>
+            <td><code>scales.x.stacked</code></td>
+            <td><code>true</code></td>
+            <td>Empilha barras no eixo X (sobrepostas, não lado a lado)</td>
+          </tr>
+          <tr>
+            <td><code>scales.y.stacked</code></td>
+            <td><code>true</code></td>
+            <td>Eixo Y soma todos os datasets para a altura total</td>
+          </tr>
+          <tr>
+            <td><code>datalabels.display</code></td>
+            <td><code>function(ctx) {...}</code></td>
+            <td>Função que oculta rótulos de valores 0</td>
+          </tr>
+          <tr>
+            <td><code>datalabels.anchor</code></td>
+            <td><code>"center"</code></td>
+            <td>Ancora o rótulo no centro da barra</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-2" onclick="toggleCode('2')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-2">
+        <div class="code-block"><pre><span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+  <span class="prop">type</span>: <span class="str">"bar"</span>,
+  <span class="prop">data</span>: {
+    <span class="prop">labels</span>: [<span class="str">"Jan/26"</span>, <span class="str">"Fev/26"</span>, <span class="str">"Mar/26"</span>, <span class="str">"Abr/26"</span>],
+    <span class="prop">datasets</span>: [
+      { <span class="prop">label</span>: <span class="str">"Bug"</span>,      <span class="prop">data</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">2</span>,<span class="num">2</span>], <span class="prop">backgroundColor</span>: <span class="str">"#ef4444"</span> },
+      { <span class="prop">label</span>: <span class="str">"Melhoria"</span>, <span class="prop">data</span>: [<span class="num">1</span>,<span class="num">0</span>,<span class="num">1</span>,<span class="num">1</span>], <span class="prop">backgroundColor</span>: <span class="str">"#6366f1"</span> }
+    ]
+  },
+  <span class="prop">options</span>: {
+    <span class="prop">scales</span>: {
+      <span class="prop">x</span>: { <span class="prop">stacked</span>: <span class="kw">true</span> },  <span class="cmt">// empilha no X</span>
+      <span class="prop">y</span>: { <span class="prop">stacked</span>: <span class="kw">true</span> }   <span class="cmt">// empilha no Y</span>
+    },
+    <span class="prop">plugins</span>: {
+      <span class="prop">datalabels</span>: {
+        <span class="prop">display</span>: <span class="kw">function</span>(ctx) {
+          <span class="kw">return</span> ctx.dataset.data[ctx.dataIndex] > <span class="num">0</span>;
+        },
+        <span class="prop">color</span>: <span class="str">"#fff"</span>,
+        <span class="prop">anchor</span>: <span class="str">"center"</span>,
+        <span class="prop">align</span>: <span class="str">"center"</span>
+      }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         EXEMPLO 3 — DOUGHNUT (ROSCA)
+         ══════════════════════════════════════════════════════ -->
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">3</div>
+        <h2>Doughnut (Rosca) <span>— type: "doughnut" + legenda customizada</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Mostra a distribuição por categoria. <code>cutout: "52%"</code> controla
+        o tamanho do buraco central. A legenda usa <code>generateLabels</code>
+        para exibir a porcentagem ao lado de cada nome. O <code>datalabels</code>
+        só aparece em fatias maiores que 8%.
+      </div>
+
+      <div class="chart-box h300">
+        <canvas id="chart3"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>type</code></td>
+            <td><code>"doughnut"</code></td>
+            <td>Gráfico de rosca. Use "pie" para pizza sólida</td>
+          </tr>
+          <tr>
+            <td><code>cutout</code></td>
+            <td><code>"52%"</code></td>
+            <td>Tamanho do buraco central. "0%" = sólido, "80%" = fino</td>
+          </tr>
+          <tr>
+            <td><code>borderWidth</code></td>
+            <td><code>2</code></td>
+            <td>Borda entre as fatias (px)</td>
+          </tr>
+          <tr>
+            <td><code>hoverOffset</code></td>
+            <td><code>8</code></td>
+            <td>Quanto a fatia "salta" no hover (px)</td>
+          </tr>
+          <tr>
+            <td><code>legend.position</code></td>
+            <td><code>"right"</code></td>
+            <td>Posição da legenda: "top", "bottom", "left", "right"</td>
+          </tr>
+          <tr>
+            <td><code>generateLabels</code></td>
+            <td>function</td>
+            <td>Customiza texto da legenda: "Impostos (20.0%)"</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-3" onclick="toggleCode('3')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-3">
+        <div class="code-block"><pre><span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+  <span class="prop">type</span>: <span class="str">"doughnut"</span>,
+  <span class="prop">data</span>: {
+    <span class="prop">labels</span>: [<span class="str">"Leitura CNPJ"</span>, <span class="str">"Impostos"</span>, <span class="str">"Erro OCR"</span>, ...],
+    <span class="prop">datasets</span>: [{
+      <span class="prop">data</span>: [<span class="num">2</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">2</span>],
+      <span class="prop">backgroundColor</span>: [<span class="str">"#6366f1"</span>, <span class="str">"#f59e0b"</span>, ...],
+      <span class="prop">borderWidth</span>: <span class="num">2</span>,
+      <span class="prop">borderColor</span>: <span class="str">"#fff"</span>,
+      <span class="prop">hoverOffset</span>: <span class="num">8</span>
+    }]
+  },
+  <span class="prop">options</span>: {
+    <span class="prop">cutout</span>: <span class="str">"52%"</span>,   <span class="cmt">// tamanho do buraco</span>
+    <span class="prop">plugins</span>: {
+      <span class="prop">legend</span>: {
+        <span class="prop">position</span>: <span class="str">"right"</span>,
+        <span class="prop">labels</span>: {
+          <span class="prop">generateLabels</span>: <span class="kw">function</span>(chart) {
+            <span class="cmt">// Adiciona percentual à legenda</span>
+            <span class="kw">return</span> chart.data.labels.<span class="fn">map</span>(<span class="kw">function</span>(label, i) {
+              <span class="kw">var</span> pct = (ds.data[i] / total * <span class="num">100</span>).toFixed(<span class="num">1</span>);
+              <span class="kw">return</span> { text: label + <span class="str">" ("</span> + pct + <span class="str">"%)"</span>, ... };
+            });
+          }
+        }
+      }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         EXEMPLO 4 — GRÁFICO DE LINHA
+         ══════════════════════════════════════════════════════ -->
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">4</div>
+        <h2>Gráfico de Linha <span>— type: "line" + fill + tension</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Mostra a evolução das horas gastas por mês. <code>fill: true</code>
+        preenche a área abaixo da linha. <code>tension: 0.35</code> suaviza
+        as curvas. O <code>backgroundColor</code> usa opacidade HEX
+        (<code>"#6366f118"</code> → ~9%) para preenchimento sutil.
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chart4"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>borderColor</code></td>
+            <td><code>"#6366f1"</code></td>
+            <td>Cor da linha</td>
+          </tr>
+          <tr>
+            <td><code>backgroundColor</code></td>
+            <td><code>"#6366f118"</code></td>
+            <td>Preenchimento. "18" = opacidade HEX (~9%)</td>
+          </tr>
+          <tr>
+            <td><code>fill</code></td>
+            <td><code>true</code></td>
+            <td>true = preenche abaixo da linha. false = só a linha</td>
+          </tr>
+          <tr>
+            <td><code>tension</code></td>
+            <td><code>0.35</code></td>
+            <td>Curvatura: 0 = reta, 0.35 = suave, 1 = muito curvo</td>
+          </tr>
+          <tr>
+            <td><code>pointRadius</code></td>
+            <td><code>6</code></td>
+            <td>Tamanho das bolinhas nos pontos</td>
+          </tr>
+          <tr>
+            <td><code>pointBackgroundColor</code></td>
+            <td><code>"#fff"</code></td>
+            <td>Branco = efeito de "bolinha vazada"</td>
+          </tr>
+          <tr>
+            <td><code>pointBorderWidth</code></td>
+            <td><code>2.5</code></td>
+            <td>Espessura da borda do ponto</td>
+          </tr>
+          <tr>
+            <td><code>y.ticks.callback</code></td>
+            <td><code>v → v + "h"</code></td>
+            <td>Formata os ticks do eixo: "4h", "8h", "12h"</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-4" onclick="toggleCode('4')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-4">
+        <div class="code-block"><pre><span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+  <span class="prop">type</span>: <span class="str">"line"</span>,
+  <span class="prop">data</span>: {
+    <span class="prop">labels</span>: [<span class="str">"Jan/26"</span>, <span class="str">"Fev/26"</span>, <span class="str">"Mar/26"</span>, <span class="str">"Abr/26"</span>],
+    <span class="prop">datasets</span>: [{
+      <span class="prop">label</span>: <span class="str">"Horas gastas"</span>,
+      <span class="prop">data</span>: [<span class="num">4.5</span>, <span class="num">7.0</span>, <span class="num">5.5</span>, <span class="num">11.0</span>],
+      <span class="prop">borderColor</span>: <span class="str">"#6366f1"</span>,         <span class="cmt">// cor da linha</span>
+      <span class="prop">backgroundColor</span>: <span class="str">"#6366f118"</span>,   <span class="cmt">// preenchimento ~9%</span>
+      <span class="prop">fill</span>: <span class="kw">true</span>,                      <span class="cmt">// preenche abaixo</span>
+      <span class="prop">tension</span>: <span class="num">0.35</span>,                   <span class="cmt">// curvatura suave</span>
+      <span class="prop">pointRadius</span>: <span class="num">6</span>,
+      <span class="prop">pointBackgroundColor</span>: <span class="str">"#fff"</span>,   <span class="cmt">// bolinha vazada</span>
+      <span class="prop">pointBorderWidth</span>: <span class="num">2.5</span>,
+      <span class="prop">pointBorderColor</span>: <span class="str">"#6366f1"</span>
+    }]
+  },
+  <span class="prop">options</span>: {
+    <span class="prop">scales</span>: {
+      <span class="prop">y</span>: {
+        <span class="prop">ticks</span>: {
+          <span class="prop">callback</span>: <span class="kw">function</span>(v) { <span class="kw">return</span> v + <span class="str">"h"</span>; }
+        }
+      }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         EXEMPLO 5 — BARRAS HORIZONTAIS
+         ══════════════════════════════════════════════════════ -->
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">5</div>
+        <h2>Barras Horizontais <span>— indexAxis: "y"</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Mostra o tempo médio por categoria. O segredo é <code>indexAxis: "y"</code>
+        — uma única propriedade transforma barras verticais em horizontais.
+        Quando ativo, <code>scales.x</code> vira o eixo de valores e
+        <code>scales.y</code> vira o eixo de categorias.
+      </div>
+
+      <div class="chart-box h260">
+        <canvas id="chart5"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>indexAxis</code></td>
+            <td><code>"y"</code></td>
+            <td>A ÚNICA mudança para barras horizontais. "x" = vertical (padrão)</td>
+          </tr>
+          <tr>
+            <td><code>scales.x</code></td>
+            <td>Eixo de valores</td>
+            <td>Com indexAxis: "y", X vira os VALORES (horizontal)</td>
+          </tr>
+          <tr>
+            <td><code>scales.y</code></td>
+            <td>Eixo de categorias</td>
+            <td>Com indexAxis: "y", Y vira as CATEGORIAS (vertical)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-5" onclick="toggleCode('5')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-5">
+        <div class="code-block"><pre><span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+  <span class="prop">type</span>: <span class="str">"bar"</span>,
+  <span class="prop">data</span>: {
+    <span class="prop">labels</span>: [<span class="str">"Erro OCR"</span>, <span class="str">"Leitura CNPJ"</span>, <span class="str">"Valor monetário"</span>, ...],
+    <span class="prop">datasets</span>: [{
+      <span class="prop">data</span>: [<span class="num">5.5</span>, <span class="num">3.75</span>, <span class="num">2.5</span>, <span class="num">1.25</span>, <span class="num">1.25</span>],
+      <span class="prop">backgroundColor</span>: [<span class="str">"#6366f1"</span>, <span class="str">"#f59e0b"</span>, ...],
+      <span class="prop">borderRadius</span>: <span class="num">6</span>
+    }]
+  },
+  <span class="prop">options</span>: {
+    <span class="prop">indexAxis</span>: <span class="str">"y"</span>,   <span class="cmt">// ← A MÁGICA: barras horizontais</span>
+    <span class="prop">plugins</span>: {
+      <span class="prop">datalabels</span>: {
+        <span class="prop">formatter</span>: <span class="kw">function</span>(v) { <span class="kw">return</span> v + <span class="str">"h"</span>; }
+      }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         EXEMPLO 6 — MÚLTIPLAS LINHAS
+         ══════════════════════════════════════════════════════ -->
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">6</div>
+        <h2>Múltiplas Linhas <span>— 2 datasets tipo line</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Duas linhas no mesmo gráfico: Bug (vermelho) e Melhoria (indigo).
+        Cada <code>dataset</code> tem suas próprias cores. A função
+        <code>datalabels.color</code> usa <code>ctx.dataset.borderColor</code>
+        para que a cor do rótulo combine com a linha correspondente.
+      </div>
+
+      <!-- Legenda HTML customizada para 2 linhas -->
+      <div class="legenda">
+        <span><i style="background:#ef4444"></i> Bug</span>
+        <span><i style="background:#6366f1"></i> Melhoria</span>
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chart6"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>datasets</code></td>
+            <td>2 objetos</td>
+            <td>Cada objeto = 1 linha com suas próprias cores e dados</td>
+          </tr>
+          <tr>
+            <td><code>datalabels.color</code></td>
+            <td><code>function(ctx)</code></td>
+            <td>Retorna ctx.dataset.borderColor → cor do rótulo = cor da linha</td>
+          </tr>
+          <tr>
+            <td><code>y.ticks.stepSize</code></td>
+            <td><code>1</code></td>
+            <td>Incremento do eixo Y (1 em 1, sem decimais)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-6" onclick="toggleCode('6')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-6">
+        <div class="code-block"><pre><span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+  <span class="prop">type</span>: <span class="str">"line"</span>,
+  <span class="prop">data</span>: {
+    <span class="prop">labels</span>: [<span class="str">"Jan/26"</span>, <span class="str">"Fev/26"</span>, <span class="str">"Mar/26"</span>, <span class="str">"Abr/26"</span>],
+    <span class="prop">datasets</span>: [
+      {
+        <span class="prop">label</span>: <span class="str">"Bug"</span>,
+        <span class="prop">data</span>: [<span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">2</span>],
+        <span class="prop">borderColor</span>: <span class="str">"#ef4444"</span>,
+        <span class="prop">backgroundColor</span>: <span class="str">"#ef444418"</span>,
+        <span class="prop">fill</span>: <span class="kw">true</span>,
+        <span class="prop">tension</span>: <span class="num">0.35</span>
+      },
+      {
+        <span class="prop">label</span>: <span class="str">"Melhoria"</span>,
+        <span class="prop">data</span>: [<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>, <span class="num">1</span>],
+        <span class="prop">borderColor</span>: <span class="str">"#6366f1"</span>,
+        <span class="prop">backgroundColor</span>: <span class="str">"#6366f118"</span>,
+        <span class="prop">fill</span>: <span class="kw">true</span>,
+        <span class="prop">tension</span>: <span class="num">0.35</span>
+      }
+    ]
+  },
+  <span class="prop">options</span>: {
+    <span class="prop">plugins</span>: {
+      <span class="prop">datalabels</span>: {
+        <span class="cmt">// Cor do rótulo = cor da linha do dataset</span>
+        <span class="prop">color</span>: <span class="kw">function</span>(ctx) {
+          <span class="kw">return</span> ctx.dataset.borderColor;
+        }
+      }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         EXEMPLO 7 — DESTRUIR E RECRIAR
+         ══════════════════════════════════════════════════════ -->
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">7</div>
+        <h2>Destruir e Recriar <span>— chart.destroy() + referência global</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        O mesmo <code>&lt;canvas&gt;</code> é reutilizado para 3 tipos de gráfico.
+        Antes de criar um novo, é <strong>obrigatório</strong> chamar
+        <code>chart.destroy()</code> no anterior. Sem isso, o Chart.js sobrepõe
+        gráficos e causa cintilação. A referência fica em uma variável global
+        <code>chartEx7</code>.
+      </div>
+
+      <!-- Botões que trocam o gráfico -->
+      <div class="btn-row" id="ex7-btns">
+        <button class="btn btn-red active" onclick="criarBarras7()">
+          Barras
+        </button>
+        <button class="btn btn-amber" onclick="criarRosca7()">
+          Rosca
+        </button>
+        <button class="btn btn-emerald" onclick="criarLinha7()">
+          Linha
+        </button>
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chart7"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Método</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>chart.destroy()</code></td>
+            <td>Remove o gráfico do canvas e libera memória. OBRIGATÓRIO antes de criar novo</td>
+          </tr>
+          <tr>
+            <td><code>chart.update()</code></td>
+            <td>Redesenha com dados atuais (se modificou chart.data.datasets diretamente)</td>
+          </tr>
+          <tr>
+            <td><code>chart.toBase64Image()</code></td>
+            <td>Exporta o gráfico como imagem PNG em base64</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-7" onclick="toggleCode('7')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-7">
+        <div class="code-block"><pre><span class="cmt">// Variável GLOBAL que guarda a referência ao gráfico</span>
+<span class="kw">var</span> chartEx7 = <span class="kw">null</span>;
+
+<span class="kw">function</span> <span class="fn">criarBarras</span>() {
+  <span class="kw">var</span> ctx = document.<span class="fn">getElementById</span>(<span class="str">"chart7"</span>);
+
+  <span class="cmt">// 1. DESTROI o gráfico anterior (se existir)</span>
+  <span class="kw">if</span> (chartEx7) {
+    chartEx7.<span class="fn">destroy</span>();   <span class="cmt">// libera canvas + memória</span>
+    chartEx7 = <span class="kw">null</span>;
+  }
+
+  <span class="cmt">// 2. Cria o novo e GUARDA a referência</span>
+  chartEx7 = <span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+    <span class="prop">type</span>: <span class="str">"bar"</span>,
+    <span class="prop">data</span>: { ... },
+    <span class="prop">options</span>: { ... }
+  });
+}
+
+<span class="kw">function</span> <span class="fn">criarRosca</span>() {
+  <span class="kw">if</span> (chartEx7) chartEx7.<span class="fn">destroy</span>();
+  chartEx7 = <span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+    <span class="prop">type</span>: <span class="str">"doughnut"</span>, ...
+  });
+}
+
+<span class="kw">function</span> <span class="fn">criarLinha</span>() {
+  <span class="kw">if</span> (chartEx7) chartEx7.<span class="fn">destroy</span>();
+  chartEx7 = <span class="kw">new</span> <span class="fn">Chart</span>(ctx, {
+    <span class="prop">type</span>: <span class="str">"line"</span>, ...
+  });
+}</pre></div>
+      </div>
+    </div>
+    
+
+    <!-- ══════════════════════════════════════════════════════
+         EXERCÍCIOS RESOLVIDOS — GUIA CHART.JS
+         ══════════════════════════════════════════════════════ -->
+    <div class="secao-sep">Exercícios resolvidos</div>
+
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">EX. 1</div>
+        <h2>Categoria Detalhada <span>— barras verticais</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Conta quantos chamados existem em cada <code>categoria_detalhada</code> e exibe o resultado em barras.
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chartex1"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor usado</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>type</code></td><td><code>"bar"</code></td><td>Cria barras verticais</td></tr>
+          <tr><td><code>labels</code></td><td><code>contagemCat</code></td><td>Usa as categorias detalhadas no eixo X</td></tr>
+          <tr><td><code>data</code></td><td><code>quantidade por categoria</code></td><td>Altura de cada barra</td></tr>
+          <tr><td><code>datalabels</code></td><td><code>display: true</code></td><td>Mostra o valor acima de cada barra</td></tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-ex1" onclick="toggleCode('ex1')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-ex1">
+        <div class="code-block"><pre>var ctx = document.getElementById(&quot;chartex1&quot;);
+
+new Chart(ctx, {
+  type: &quot;bar&quot;,
+  data: {
+    labels: contagemCat.map(function(c) { return c[0]; }),
+    datasets: [{
+      label: &quot;Quantidade por categoria detalhada&quot;,
+      data: contagemCat.map(function(c) { return c[1]; }),
+      backgroundColor: contagemCat.map(function(_, i) { return P[i % P.length]; }),
+      borderRadius: 8,
+      borderSkipped: false,
+      barThickness: 52,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: { display: true, anchor: &quot;end&quot;, align: &quot;top&quot; }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true, ticks: { stepSize: 1 } }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">EX. 2</div>
+        <h2>Bug vs Melhoria <span>— doughnut</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Mostra a proporção entre chamados do tipo <code>Bug</code> e <code>Melhoria</code> usando gráfico de rosca.
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chartex2"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor usado</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>type</code></td><td><code>"doughnut"</code></td><td>Cria gráfico de rosca</td></tr>
+          <tr><td><code>cutout</code></td><td><code>"52%"</code></td><td>Define o tamanho do furo central</td></tr>
+          <tr><td><code>labels</code></td><td><code>contagemTipo</code></td><td>Usa Bug e Melhoria como fatias</td></tr>
+          <tr><td><code>formatter</code></td><td><code>valor + percentual</code></td><td>Mostra quantidade e porcentagem</td></tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-ex2" onclick="toggleCode('ex2')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-ex2">
+        <div class="code-block"><pre>var ctx = document.getElementById(&quot;chartex2&quot;);
+var total = DADOS.length;
+
+new Chart(ctx, {
+  type: &quot;doughnut&quot;,
+  data: {
+    labels: contagemTipo.map(function(c) { return c[0]; }),
+    datasets: [{
+      data: contagemTipo.map(function(c) { return c[1]; }),
+      backgroundColor: [&quot;#ef4444&quot;, &quot;#6366f1&quot;],
+      borderWidth: 2,
+      borderColor: &quot;#fff&quot;,
+      hoverOffset: 8,
+    }]
+  },
+  options: {
+    cutout: &quot;52%&quot;,
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: &quot;right&quot; },
+      datalabels: {
+        display: true,
+        color: &quot;#fff&quot;,
+        formatter: function(value) {
+          var pct = ((value / total) * 100).toFixed(1);
+          return value + &quot;\n&quot; + pct + &quot;%&quot;;
+        }
+      }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">EX. 3</div>
+        <h2>Total de horas por mês <span>— linha com preenchimento</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Mostra o total de <code>tempo_gasto</code> por mês. Usa <code>fill: true</code>,
+        opacidade de 15% no preenchimento e <code>tension: 0.4</code> para suavizar a linha.
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chartex3"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor usado</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>type</code></td><td><code>"line"</code></td><td>Cria gráfico de linha</td></tr>
+          <tr><td><code>labels</code></td><td><code>mesesUnicos.map(mesLabel)</code></td><td>Usa os meses no eixo X</td></tr>
+          <tr><td><code>data</code></td><td><code>horasPorMes</code></td><td>Soma as horas gastas em cada mês</td></tr>
+          <tr><td><code>fill</code></td><td><code>true</code></td><td>Preenche a área abaixo da linha</td></tr>
+          <tr><td><code>backgroundColor</code></td><td><code>rgba(..., 0.15)</code></td><td>Aplica opacidade de 15%</td></tr>
+          <tr><td><code>tension</code></td><td><code>0.4</code></td><td>Suaviza a curva</td></tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-ex3" onclick="toggleCode('ex3')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-ex3">
+        <div class="code-block"><pre>var ctx = document.getElementById(&quot;chartex3&quot;);
+
+new Chart(ctx, {
+  type: &quot;line&quot;,
+  data: {
+    labels: mesesUnicos.map(mesLabel),
+    datasets: [{
+      label: &quot;Horas gastas&quot;,
+      data: mesesUnicos.map(function(m) { return horasPorMes[m] || 0; }),
+      borderColor: &quot;#6366f1&quot;,
+      backgroundColor: &quot;rgba(99, 102, 241, 0.15)&quot;,
+      fill: true,
+      tension: 0.4,
+      pointRadius: 6,
+      pointBackgroundColor: &quot;#fff&quot;,
+      pointBorderWidth: 2.5,
+      pointBorderColor: &quot;#6366f1&quot;
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        display: true,
+        color: &quot;#6366f1&quot;,
+        anchor: &quot;end&quot;,
+        align: &quot;top&quot;,
+        formatter: function(value) { return value + &quot;h&quot;; }
+      }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        beginAtZero: true,
+        ticks: { callback: function(value) { return value + &quot;h&quot;; } }
+      }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">EX. 4</div>
+        <h2>Tempo médio por categoria <span>— barras horizontais</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Exibe o tempo médio gasto em cada categoria usando barras horizontais com <code>indexAxis: "y"</code>.
+      </div>
+
+      <div class="chart-box h260">
+        <canvas id="chartex4"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor usado</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>type</code></td><td><code>"bar"</code></td><td>Cria barras</td></tr>
+          <tr><td><code>indexAxis</code></td><td><code>"y"</code></td><td>Transforma as barras em horizontais</td></tr>
+          <tr><td><code>labels</code></td><td><code>mediaPorCat.nome</code></td><td>Lista as categorias no eixo Y</td></tr>
+          <tr><td><code>data</code></td><td><code>mediaPorCat.media</code></td><td>Mostra o tempo médio em horas</td></tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-ex4" onclick="toggleCode('ex4')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-ex4">
+        <div class="code-block"><pre>var ctx = document.getElementById(&quot;chartex4&quot;);
+
+new Chart(ctx, {
+  type: &quot;bar&quot;,
+  data: {
+    labels: mediaPorCat.map(function(c) { return c.nome; }),
+    datasets: [{
+      label: &quot;Tempo médio (h)&quot;,
+      data: mediaPorCat.map(function(c) { return c.media; }),
+      backgroundColor: mediaPorCat.map(function(_, i) { return P[i % P.length]; }),
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: &quot;y&quot;,
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        display: true,
+        color: &quot;#fff&quot;,
+        formatter: function(value) { return value + &quot;h&quot;; }
+      }
+    },
+    scales: {
+      x: { beginAtZero: true, ticks: { callback: function(v) { return v + &quot;h&quot;; } } },
+      y: { grid: { display: false } }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+
+
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">EX. 5</div>
+        <h2>Bug vs Melhoria por mês <span>— barras empilhadas</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Mostra a quantidade mensal de chamados dividida entre <code>Bug</code> e <code>Melhoria</code>.
+        O empilhamento é feito com <code>scales.x.stacked: true</code> e <code>scales.y.stacked: true</code>.
+      </div>
+
+      <div class="legenda">
+        <span><i style="background:#ef4444"></i> Bug</span>
+        <span><i style="background:#6366f1"></i> Melhoria</span>
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chartex5"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor usado</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>type</code></td><td><code>"bar"</code></td><td>Cria gráfico de barras</td></tr>
+          <tr><td><code>datasets</code></td><td><code>Bug + Melhoria</code></td><td>Cada dataset vira uma camada da barra</td></tr>
+          <tr><td><code>stacked</code></td><td><code>true</code></td><td>Empilha os valores no mesmo mês</td></tr>
+          <tr><td><code>datalabels</code></td><td><code>display por valor &gt; 0</code></td><td>Mostra somente valores absolutos positivos</td></tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-ex5" onclick="toggleCode('ex5')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-ex5">
+        <div class="code-block"><pre>var ctx = document.getElementById(&quot;chartex5&quot;);
+
+new Chart(ctx, {
+  type: &quot;bar&quot;,
+  data: {
+    labels: mesesUnicos.map(mesLabel),
+    datasets: [
+      {
+        label: &quot;Bug&quot;,
+        data: mesesUnicos.map(function(m) { return porMesTipo[m][&quot;Bug&quot;] || 0; }),
+        backgroundColor: &quot;#ef4444&quot;,
+        borderRadius: 6,
+        borderSkipped: false
+      },
+      {
+        label: &quot;Melhoria&quot;,
+        data: mesesUnicos.map(function(m) { return porMesTipo[m][&quot;Melhoria&quot;] || 0; }),
+        backgroundColor: &quot;#6366f1&quot;,
+        borderRadius: 6,
+        borderSkipped: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        display: function(ctx) { return ctx.dataset.data[ctx.dataIndex] &gt; 0; },
+        color: &quot;#fff&quot;,
+        anchor: &quot;center&quot;,
+        align: &quot;center&quot;
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">EX. 6</div>
+        <h2>Bug vs Melhoria por mês <span>— múltiplas linhas</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Cria duas linhas no mesmo gráfico: uma para quantidade de bugs por mês e outra para melhorias.
+        Cada linha usa cor, legenda e dataset próprios.
+      </div>
+
+      <div class="legenda">
+        <span><i style="background:#ef4444"></i> Bug</span>
+        <span><i style="background:#6366f1"></i> Melhoria</span>
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chartex6"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parâmetro</th><th>Valor usado</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>type</code></td><td><code>"line"</code></td><td>Cria gráfico de linhas</td></tr>
+          <tr><td><code>datasets</code></td><td><code>2 objetos</code></td><td>Uma linha para Bug e outra para Melhoria</td></tr>
+          <tr><td><code>borderColor</code></td><td><code>cores distintas</code></td><td>Define a cor de cada linha</td></tr>
+          <tr><td><code>datalabels.color</code></td><td><code>ctx.dataset.borderColor</code></td><td>Faz o rótulo ter a mesma cor da linha</td></tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-ex6" onclick="toggleCode('ex6')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-ex6">
+        <div class="code-block"><pre>var ctx = document.getElementById(&quot;chartex6&quot;);
+
+new Chart(ctx, {
+  type: &quot;line&quot;,
+  data: {
+    labels: mesesUnicos.map(mesLabel),
+    datasets: [
+      {
+        label: &quot;Bug&quot;,
+        data: mesesUnicos.map(function(m) { return porMesTipo[m][&quot;Bug&quot;] || 0; }),
+        borderColor: &quot;#ef4444&quot;,
+        backgroundColor: &quot;#ef444418&quot;,
+        fill: true,
+        tension: 0.35,
+        pointRadius: 5,
+        pointBackgroundColor: &quot;#fff&quot;,
+        pointBorderWidth: 2,
+        pointBorderColor: &quot;#ef4444&quot;
+      },
+      {
+        label: &quot;Melhoria&quot;,
+        data: mesesUnicos.map(function(m) { return porMesTipo[m][&quot;Melhoria&quot;] || 0; }),
+        borderColor: &quot;#6366f1&quot;,
+        backgroundColor: &quot;#6366f118&quot;,
+        fill: true,
+        tension: 0.35,
+        pointRadius: 5,
+        pointBackgroundColor: &quot;#fff&quot;,
+        pointBorderWidth: 2,
+        pointBorderColor: &quot;#6366f1&quot;
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        display: true,
+        anchor: &quot;end&quot;,
+        align: &quot;top&quot;,
+        color: function(ctx) { return ctx.dataset.borderColor; }
+      }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true, ticks: { stepSize: 1 } }
+    }
+  }
+});</pre></div>
+      </div>
+    </div>
+
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num">EX. 7</div>
+        <h2>Destruir e recriar <span>— chart.destroy()</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Usa o mesmo <code>&lt;canvas&gt;</code> para alternar entre barras e rosca.
+        Antes de criar o próximo gráfico, o código destrói o anterior com <code>chart.destroy()</code>.
+      </div>
+
+      <div class="btn-row" id="exercicio7-btns">
+        <button class="btn btn-red active" onclick="criarBarrasExercicio7()">Barras</button>
+        <button class="btn btn-amber" onclick="criarRoscaExercicio7()">Rosca</button>
+      </div>
+
+      <div class="chart-box h280">
+        <canvas id="chartex7"></canvas>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Conceito</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>chartAtualExercicio7</code></td><td>Guarda a referência do gráfico ativo</td></tr>
+          <tr><td><code>destroy()</code></td><td>Remove o gráfico antigo antes de criar outro</td></tr>
+          <tr><td><code>criarBarrasExercicio7()</code></td><td>Renderiza barras de categorias detalhadas</td></tr>
+          <tr><td><code>criarRoscaExercicio7()</code></td><td>Renderiza rosca com Bug vs Melhoria</td></tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-ex7" onclick="toggleCode('ex7')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-ex7">
+        <div class="code-block"><pre>var chartAtualExercicio7 = null;
+
+function destruirGraficoExercicio7() {
+  if (chartAtualExercicio7) {
+    chartAtualExercicio7.destroy();
+    chartAtualExercicio7 = null;
+  }
+}
+
+function criarBarrasExercicio7() {
+  destruirGraficoExercicio7();
+  var ctx = document.getElementById(&quot;chartex7&quot;);
+
+  chartAtualExercicio7 = new Chart(ctx, {
+    type: &quot;bar&quot;,
+    data: {
+      labels: contagemCat.map(function(c) { return c[0]; }),
+      datasets: [{
+        label: &quot;Chamados por categoria&quot;,
+        data: contagemCat.map(function(c) { return c[1]; }),
+        backgroundColor: contagemCat.map(function(_, i) { return P[i % P.length]; }),
+        borderRadius: 8,
+        borderSkipped: false
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+}
+
+function criarRoscaExercicio7() {
+  destruirGraficoExercicio7();
+  var ctx = document.getElementById(&quot;chartex7&quot;);
+
+  chartAtualExercicio7 = new Chart(ctx, {
+    type: &quot;doughnut&quot;,
+    data: {
+      labels: contagemTipo.map(function(c) { return c[0]; }),
+      datasets: [{
+        data: contagemTipo.map(function(c) { return c[1]; }),
+        backgroundColor: [&quot;#ef4444&quot;, &quot;#6366f1&quot;]
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: &quot;52%&quot; }
+  });
+}</pre></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         BÔNUS — EXPORTAR JSON
+         ══════════════════════════════════════════════════════ -->
+    <div class="secao-sep">Bônus</div>
+
+    <div class="exemplo">
+      <div class="exemplo-header">
+        <div class="exemplo-num" style="background:#10b981">✦</div>
+        <h2>Exportar JSON <span>— Blob + createObjectURL</span></h2>
+      </div>
+
+      <div class="exemplo-desc">
+        Todos os dados processados podem ser exportados como JSON.
+        Usamos <code>Blob</code> para criar o arquivo na memória,
+        <code>URL.createObjectURL()</code> para gerar um link temporário
+        e simulamos um clique em um <code>&lt;a&gt;</code> invisível
+        para disparar o download. Tudo 100% no navegador, sem servidor.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-emerald" id="btnExport" onclick="exportarJSON()">
+          ↓ Exportar JSON dos Resultados
+        </button>
+      </div>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Conceito</th><th>O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>new Blob([string], {type})</code></td>
+            <td>Cria objeto binário na memória com o conteúdo do arquivo</td>
+          </tr>
+          <tr>
+            <td><code>URL.createObjectURL(blob)</code></td>
+            <td>Gera uma URL temporária (blob:http://...) para o Blob</td>
+          </tr>
+          <tr>
+            <td><code>link.download = "nome.json"</code></td>
+            <td>Define o nome do arquivo ao baixar</td>
+          </tr>
+          <tr>
+            <td><code>link.click()</code></td>
+            <td>Simula clique no &lt;a&gt; para iniciar o download</td>
+          </tr>
+          <tr>
+            <td><code>URL.revokeObjectURL(url)</code></td>
+            <td>Libera a memória da URL temporária após o download</td>
+          </tr>
+          <tr>
+            <td><code>JSON.stringify(obj, null, 2)</code></td>
+            <td>Serializa com indentação de 2 espaços para legibilidade</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="code-toggle" id="btn-8" onclick="toggleCode('8')">
+        <span class="arrow">▶</span> Ver código
+      </button>
+      <div class="code-wrapper" id="code-8">
+        <div class="code-block"><pre><span class="kw">function</span> <span class="fn">exportarJSON</span>() {
+  <span class="cmt">// 1. Monta o objeto com os resultados</span>
+  <span class="kw">var</span> resultado = {
+    <span class="prop">meta</span>: { <span class="prop">exportadoEm</span>: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>() },
+    <span class="prop">distribuicao</span>: {
+      <span class="prop">porTipo</span>: [{ <span class="prop">nome</span>: <span class="str">"Bug"</span>, <span class="prop">quantidade</span>: <span class="num">7</span> }, ...],
+      <span class="prop">porCategoria</span>: [...],
+      <span class="prop">porMes</span>: [...]
+    },
+    <span class="prop">dados</span>: DADOS
+  };
+
+  <span class="cmt">// 2. Cria Blob (arquivo na memória)</span>
+  <span class="kw">var</span> blob = <span class="kw">new</span> <span class="fn">Blob</span>(
+    [JSON.<span class="fn">stringify</span>(resultado, <span class="kw">null</span>, <span class="num">2</span>)],
+    { <span class="prop">type</span>: <span class="str">"application/json"</span> }
+  );
+
+  <span class="cmt">// 3. Cria URL temporária</span>
+  <span class="kw">var</span> url = URL.<span class="fn">createObjectURL</span>(blob);
+
+  <span class="cmt">// 4. Cria &lt;a&gt; e simula clique</span>
+  <span class="kw">var</span> link = document.<span class="fn">createElement</span>(<span class="str">"a"</span>);
+  link.href = url;
+  link.download = <span class="str">"analise_chamados.json"</span>;
+  link.<span class="fn">click</span>();
+
+  <span class="cmt">// 5. Libera memória</span>
+  URL.<span class="fn">revokeObjectURL</span>(url);
+}</pre></div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         RODAPÉ
+         ══════════════════════════════════════════════════════ -->
+    <div class="footer">
+      Material didático — Tecnologias para a Internet — 2026<br>
+      100% local · nenhum dado enviado a servidores
+    </div>
+
+  </div><!-- /container -->
+
+  <!-- ══════════════════════════════════════════════
+       JAVASCRIPT — arquivo separado (exemplos_chartjs.js)
+       Contém: dados, funções, todos os 7 gráficos
+       ══════════════════════════════════════════════ -->
+  <script src="exemplos_chartjs.js"></script>
+
+</body>
+</html>
